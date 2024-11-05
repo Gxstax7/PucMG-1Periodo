@@ -26,8 +26,9 @@ int main (void){
     puts ("\nDigite o tamanho da pizza: ");
     fgets (p.tamanho, 50, stdin);
     fflush (stdin);
+    system("cls");
 
-    printf ("\n\n--------------- Pizza informada ---------------\n");
+    printf ("--------------- Pizza informada ---------------\n");
     printf ("\tNome: %s", p.nome);
     printf ("\tPreço: %.2f\n", p.preco);
     printf ("\tTamanho: %s", p.tamanho);
