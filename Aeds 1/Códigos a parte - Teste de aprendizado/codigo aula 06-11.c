@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//Define a estrutura
 typedef struct product{
 
     int id;
@@ -13,6 +14,7 @@ typedef struct product{
 
 typedef struct product product;
 
+//Função para cadastro
 product CadastroProduto (void){
 
     product prod;
@@ -32,6 +34,7 @@ product CadastroProduto (void){
     return prod;
 }
 
+//Função para printar
 void imprimiProduto (product prod){
 
     puts ("-------------- Produto cadastrado --------------\n");
@@ -57,6 +60,8 @@ int main (void){
     system ("cls");
 
     product products [quant];
+
+    //Iteração para cadastro e apresentação
     for (int i = 0; i < quant; i++)
         products [i] = CadastroProduto ();
 
