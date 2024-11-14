@@ -15,6 +15,7 @@ typedef struct carros carros;
 
 carros cadastraCarro (void);
 int menu (void);
+void listarCarros (carros*, int);
 
 int main (){
 
@@ -38,7 +39,7 @@ int main (){
      }
 
     if (opc == 1){
-        //listarcarros (carro);
+        listarCarros(carro, n);
     }
 
 
@@ -69,6 +70,8 @@ carros cadastraCarro(void){
     puts ("Digite o modelo do carro: ");
     fgets (carro.modelo, 20, stdin);
     fflush (stdin);
+    puts ("Digite a cor do carro: ");
+    fgets (carro.cor, 20, stdin);
     puts ("Digite o ano do carro");
     scanf ("%d", &carro.ano);
     fflush (stdin);
@@ -83,4 +86,20 @@ carros cadastraCarro(void){
     sleep (1);
     system ("cls");
     return carro;
+}
+
+void listarCarros (carros* carro, int n){
+
+    system ("cls");
+    for (int i = 0; i < n; i++){
+        printf ("Carro %d:\n", i+1);
+        printf ("Modelo - %s", carro[i].modelo);
+        printf ("Cor - %s", carro[i].cor);
+        printf ("Ano - %d\n", carro[i].ano);
+        printf ("Tipo de marcha - %s", carro[i].tipo);
+        printf ("Potencia motor: %.2f\n\n", carro[i].motor);
+        printf ("--------------------------------------\n\n");
+    }
+
+
 }
