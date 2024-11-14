@@ -11,7 +11,7 @@ typedef struct carros {
 
 }carros;
 
-//typedef struct carros carros;
+typedef struct carros carros;
 
 carros cadastraCarro (void);
 int menu (void);
