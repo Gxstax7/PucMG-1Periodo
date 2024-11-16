@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtragem - MatchMate</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/6d587288fa.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <nav>
+            <li>
+                <ul><a href="">Cadastro de jogo</a></ul>
+                <ul><a href="">Sobre Nós</a></ul>
+                <ul><a href="" class="active">Procura</a></ul>
+                <ul><a href="">Tela Inical</a></ul>
+            </li>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="filtro-container">
+            <div class="filtro-interno">
+                <h1>Filtragem</h1>
+                <button></button>
+                <div class="pesquisa">
+                    <input type="text" id="search-input" placeholder="Pesquisar por nome..." />
+                    <div class="button-group">
+                        <button onclick="filterByAge(18)">Idade: 18+</button>
+                        <button onclick="filterByAge(25)">Idade: 25+</button>
+                        <button onclick="filterByStyle('Casual')">Estilo: Casual</button>
+                        <button onclick="filterByStyle('Competitivo')">Estilo: Competitivo</button>
+                        <button onclick="resetFilters()">Encontrar pessoas recomendadas</button>
+                        <button onclick="resetFilters()">Resetar Filtros</button>
+                    </div>
+                    <div class="users">
+                        <div id="data-container"></div>
+
+                        <script>
+                            let jsonData = [];
+                        
+                            async function loadJSON() {
+                                try {
+                                    const response = await fetch('data.json');
+                                    jsonData = await response.json();
+                                    displayData(jsonData);
+                                } catch (error) {
+                                    console.error('Erro ao carregar o JSON:', error);
+                                }
+                            }
+                        
+                            function displayData(data) {
+                                const container = document.getElementById('data-container');
+                                container.innerHTML = '';
+                        
+                                data.forEach(item => {
+                                    const div = document.createElement('div');
+                                    div.className = 'item';
+                                    div.innerHTML = `
+                                        <h3>${item.user}</h3>
+                                        <p>Idade: ${item.idade}</p>
+                                        <p>Estilos: ${item.estilo}</p>
+                                    `;
+                                    container.appendChild(div);
+                                });
+                            }
+                        
+                            function searchItems() {
+                                const searchTerm = document.getElementById('search-input').value.toLowerCase();
+                                const filteredData = jsonData.filter(item => item.user.toLowerCase().includes(searchTerm));
+                                displayData(filteredData);
+                            }
+                        
+                            function filterByAge(age) {
+                                const filteredData = jsonData.filter(item => item.idade > age);
+                                displayData(filteredData);
+                            }
+                        
+                            function filterByStyle(style) {
+                                const filteredData = jsonData.filter(item => item.estilo.includes(style));
+                                displayData(filteredData);
+                            }
+
+                            function resetFilters() {
+                                displayData(jsonData);
+                                document.getElementById('search-input').value = '';
+                            }
+                        
+                            document.getElementById('search-input').addEventListener('input', searchItems);
+                        
+                            window.onload = loadJSON;
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
