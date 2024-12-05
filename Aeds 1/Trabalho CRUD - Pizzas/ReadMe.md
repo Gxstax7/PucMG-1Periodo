@@ -1,4 +1,4 @@
-Sistema de Gerenciamento de Pizzaria em C
+**Sistema de Gerenciamento de Pizzaria em C**
 Desenvolvido por Kamilly Vitória e Gustavo Dias
 
 Funcionalidades:
