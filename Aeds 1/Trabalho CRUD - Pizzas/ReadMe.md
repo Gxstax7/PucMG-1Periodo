@@ -1,13 +1,5 @@
 **Sistema de Gerenciamento de Pizzaria em C**
+
 Desenvolvido por Kamilly Vitória e Gustavo Dias
 
-Funcionalidades:
-
-Gestão do Cardápio de Pizzas: Permite ao usuário adicionar, visualizar, editar e remover pizzas do cardápio.
-Gestão de Ingredientes: Permite ao usuário adicionar, visualizar, editar e remover ingredientes disponíveis na pizzaria.
-Venda de Pizzas: Permite ao usuário registrar uma venda de pizza, com as seguintes opções:
-Selecionar uma pizza do cardápio.
-Adicionar ingredientes adicionais além dos padrões da pizza escolhida.
-Calcular o preço final da pizza, incluindo o valor base e o custo dos ingredientes extras.
-Exportação e Importação de Dados: Permite a exportação e importação de dados utilizando os arquivos pizzaria.txt e ingredientes.txt.
-Compilação com Makefile: O sistema pode ser compilado facilmente utilizando um Makefile.
+O Sistema de Gerenciamento de Pizzaria em C permite ao usuário realizar diversas funções essenciais para a gestão de uma pizzaria. O sistema possibilita adicionar, visualizar, editar e remover pizzas do cardápio, além de gerenciar os ingredientes disponíveis, permitindo também adicionar, visualizar, editar e remover ingredientes. Para o processo de vendas, o sistema permite registrar uma venda de pizza, onde o usuário pode selecionar uma pizza do cardápio, adicionar ingredientes adicionais (além dos padrões) e calcular o preço final da pizza, levando em consideração o valor base e o custo dos ingredientes extras. Além disso, o sistema oferece a funcionalidade de exportar e importar dados por meio dos arquivos pizzaria.txt e ingredientes.txt, facilitando o armazenamento e a recuperação de informações. Por fim, a compilação do sistema é facilitada por um Makefile, tornando o processo mais ágil e organizado.
