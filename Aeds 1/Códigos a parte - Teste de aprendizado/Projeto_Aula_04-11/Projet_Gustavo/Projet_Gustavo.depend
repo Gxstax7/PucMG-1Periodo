@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1730718763 source:c:\users\1543570\documents\projeto_aula_04-11\projet_gustavo\myheader.c
+	<stdio.h>
+	<stdlib.h>
+
+1730719659 source:c:\users\1543570\documents\projeto_aula_04-11\projet_gustavo\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"MyHeader.h"
+
+1730718558 c:\users\1543570\documents\projeto_aula_04-11\projet_gustavo\myheader.h
+
