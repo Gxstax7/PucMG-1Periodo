@@ -1,3 +1,4 @@
+## Conteudo
 Exercicio para aprendizado de configuração e utilização do PostgreSQL juntamente com phpPgAdmin.
 
 Optei por fazer um CRUD com o tema de times de futebol, acrescentando uma coluna na tabela e alterando os tipos de variaveis no exemplo para forçar o aprendizado.
