@@ -13,24 +13,36 @@ class Q12{
 		boolean letraMaiuscula = false;
 		boolean caractere = false;
 
-		for (char c : senha.){
+		for (char c : senha.toCharArray()){
 		
-			if (){
-			
+			if (Character.isUpperCase(c)){
+				letraMaiuscula = true;
+			}else if (Character.isLowerCase(c)){
+				letraMinuscula = true;
+			}else if (Character.isDigit(c)){
+				digito = true;
+			}else if (!(Character.isLetterOrDigit(c))){
+				caractere = true;
 			}
 
 		}
-		return true;
-	}
+			return digito && letraMaiuscula && caractere && letraMinuscula;
+		}
 
 	public static void main (String args []){
 	
-		String senha = " ";
-		senha = MyIO.readLine();
-		while (!(senha.equals = ("FIM"))){
-			System.out.println (validaSenha(senha) ? "SIM" : "NAO");
+		Scanner sc = new Scanner (System.in);
+		String senha = sc.nextLine();
+		Q12 valid = new Q12();
+		while (!senha.equals ("FIM")){
+			if (senha.length() < 8){
+			System.out.println ("NÃO");
+			}else{
+			System.out.println (valid.validaSenha(senha) ? "SIM" : "NÃO");
+			}
+		senha = sc.nextLine();
 		}
-
+		sc.close();
 	}
 
 }
