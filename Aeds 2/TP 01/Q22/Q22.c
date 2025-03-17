@@ -1,15 +1,8 @@
-/******************************************************************************
-
-                            Online C Compiler.
-                Code, Compile, Run and Debug C program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+//metodo recursivo onde sempre recebe a divisão por 10 até o numero ser < 10
 int somaDigito (int numero){
     int soma = 0;
     if (numero <= 9){
@@ -25,9 +18,9 @@ int main()
     
     char numero[50];
     int numeroConvertido;
-    scanf ("%s", numero);
+    scanf ("%s", numero); // le como string para receber o fim
     while(strcmp(numero, "FIM") != 0){
-        numeroConvertido = atoi(numero);
+        numeroConvertido = atoi(numero); // converte para inteiro para somar os digits
         printf("%d\n", somaDigito(numeroConvertido));
         scanf ("%s", numero);
     }

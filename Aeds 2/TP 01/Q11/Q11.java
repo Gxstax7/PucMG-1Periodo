@@ -2,6 +2,7 @@ import java.util.*;
 
 class Q11{
 
+	// metodo controla dois index para capturar qualquer repetição e encerrar a substring, caso seja maior que a anterior, assume seu valor e a maior substring é retornada
 	public static int maiorSubstring (String frase){
         int maior = 0, cont = 0, index = 0;
 

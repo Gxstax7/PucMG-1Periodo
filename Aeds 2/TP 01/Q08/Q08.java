@@ -2,8 +2,11 @@ import java.util.*;
 
 class Q08{
 	
+	// metodo recursivo que soma o ultimo digito e por ser inteiro passa a divisao por 10 sem o ultimo digito, caso base (num <=9) pois a divisao por 10 não sera mais possivel
 	public static int somaDigito (int numero){
+
 		int soma = 0;
+
 		if (numero <= 9){
 			return numero;
 		}else{
@@ -12,15 +15,17 @@ class Q08{
 	}
 	
 	public static void main (String args []){
-		int numero = MyIO.readInt();
+		Scanner sc = new Scanner (System.in);
+		int numero = sc.nextInt();
 		while (numero >= 0){
 			try{
 				System.out.println (somaDigito(numero));
-				numero = MyIO.readInt();
+				numero = sc.nextInt();
 			}catch(InputMismatchException e){
 				break;
 		}
 	}
+	sc.close();
 }
 }
 

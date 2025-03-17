@@ -2,6 +2,7 @@ import java.util.*;
 
 class Q16{
 
+	//metodo recursivo, compara a primeira e ultima letra e retorna falso em caso de divergencia
 	public static boolean isPalindromo(String frase, int i, int j){
 		if (j < i){
 			return true;
@@ -15,12 +16,15 @@ class Q16{
 	}
 
 	public static void main (String args[]){
+
 		Scanner sc = new Scanner (System.in);
 		String frase = sc.nextLine();
+
 		while (!frase.equals("FIM")){
 			System.out.println(isPalindromo(frase, 0, frase.length() - 1) ? "SIM" : "NAO");
 			frase = sc.nextLine();	
 		}
+
 		sc.close();
 	}
 }

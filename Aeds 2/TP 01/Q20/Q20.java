@@ -2,6 +2,7 @@ import java.util.*;
 
 class Q20 {
 
+	// verifica se so tem vogal recursivamente controlando o index, se chegar ate o final retorna true (não encontrou consoante ou outro caracter)
 	public static boolean onlyVogal (String texto, int i){
 		if(i == texto.length()){
 			return true;
@@ -14,6 +15,7 @@ class Q20 {
 		}
 	}
 
+	// verifica se so tem consoante recursivamente controlando o index, se chegar ate o final retorna true (não encontrou vogal/numero ou outro caracter)
 	public static boolean onlyConsoante (String texto, int i){
 		if (i == texto.length()){
 			return true;
