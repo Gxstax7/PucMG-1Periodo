@@ -111,46 +111,54 @@ class SHOW {
 	
 
 
-public void atribuiValores(String linha) {
-    int i = 0;
-    ArrayList<String> separa = new ArrayList<>();
+	public void atribuiValores (String linha){
+		
+		int i = 0;
+		ArrayList<String> separa = new ArrayList<>();
+		
+		//--------------------------------------------------------
+		//Lógica para realizar o split de acordo com os atributos
+		//--------------------------------------------------------
 
-    while (i < linha.length()) {  // Corrigido para i < linha.length()
-        if (linha.charAt(i) == '"') {
-            i++;
-            StringBuilder aux = new StringBuilder();  // Usando StringBuilder para melhorar a performance de concatenação
-            while (i < linha.length() && linha.charAt(i) != '"') {  // Garantindo que o índice i não ultrapasse o limite
-                aux.append(linha.charAt(i));  // Adicionando caracteres ao StringBuilder
-                i++;
-            }
-            separa.add(aux.toString());  // Convertendo para String e adicionando à lista
-            i++;  // Pula a aspa de fechamento
-        } else {
-            if (i + 1 < linha.length() && linha.charAt(i) == ',' && linha.charAt(i + 1) == ',') {
-                separa.add("NaN");
-                i += 2;  // Pula a vírgula dupla
-            } else {
-                StringBuilder aux = new StringBuilder();  // Usando StringBuilder
-                while (i < linha.length() && linha.charAt(i) != ',') {
-                    aux.append(linha.charAt(i));  // Adicionando ao StringBuilder
-                    i++;
-                }
-                separa.add(aux.toString());  // Convertendo para String e adicionando à lista
-            }
-        }
-        if (i < linha.length() && linha.charAt(i) == ',') {
-            i++;  // Pula a vírgula
-        }
-    }
+		while (i < linha.length()){
 
-    for (int j = 0; j < separa.size(); j++) {
-        System.out.println(separa.get(j));
-    }
-}
+			if(linha.charAt(i) == '"'){
+				i++;
+				StringBuilder aux = new StringBuilder();
+				while(i < linha.length() && linha.charAt(i) != '"'){
+					aux.append(linha.charAt(i));
+					i++;
+				}
+				separa.add(aux.toString());;
+				i++; //Pula a segunda aspas
+			}else{
 
+			    if (i < linha.length() && linha.charAt(i) == ',') {
+				    if(linha.charAt(i+1) == ','){
+					    separa.add("NaN");
+				    }
+           			 i++;  // Pula a vírgula
+
+       			}else{
+					StringBuilder aux = new StringBuilder();
+					while(i < linha.length() && linha.charAt(i) != ','){
+						aux.append(linha.charAt(i));
+						i++;
+					}
+					separa.add(aux.toString());
+				}
+			}
+		}
+
+		for (int j = 0 ; j < separa.size(); j++){
+			System.out.println(separa.get(j));
+		}
+
+
+	}
 
 	//Função para ler o arquivo CSV e retorna numa String.
-	public static void leArquivo(SHOW show) {
+	public static String leArquivo(SHOW show) {
 		String linha = "", conteudo = "";
 		int aux = 0;
 
@@ -158,8 +166,8 @@ public void atribuiValores(String linha) {
 			BufferedReader br = new BufferedReader(new FileReader("disneyplus.csv"));
 			while ((linha = br.readLine()) != null) {
 				
-				conteudo = linha;
-				if(aux == 8){
+				conteudo += linha;
+				if(aux == 16){
 					show.atribuiValores(linha);
 				}
 
@@ -168,6 +176,7 @@ public void atribuiValores(String linha) {
 		} catch (Exception e) {
 			System.out.println("Erro!!");
 		}
+		return conteudo;
 	}
 
 	//Func Main
