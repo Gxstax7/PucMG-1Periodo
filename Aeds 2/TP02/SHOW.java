@@ -8,7 +8,10 @@ class SHOW {
 	private ArrayList<String> LISTED_IN = new ArrayList<>();
 	private int RELEASE_YEAR;
 
+	// ------------------------
 	// Getters e Setters
+	// ------------------------
+	
 	public String getID() {
 		return SHOW_ID;
 	}
@@ -105,55 +108,74 @@ class SHOW {
 		this.RELEASE_YEAR = RELEASE_YEAR;
 	}
 
+	
+
+
+public void atribuiValores(String linha) {
+    int i = 0;
+    ArrayList<String> separa = new ArrayList<>();
+
+    while (i < linha.length()) {  // Corrigido para i < linha.length()
+        if (linha.charAt(i) == '"') {
+            i++;
+            StringBuilder aux = new StringBuilder();  // Usando StringBuilder para melhorar a performance de concatenação
+            while (i < linha.length() && linha.charAt(i) != '"') {  // Garantindo que o índice i não ultrapasse o limite
+                aux.append(linha.charAt(i));  // Adicionando caracteres ao StringBuilder
+                i++;
+            }
+            separa.add(aux.toString());  // Convertendo para String e adicionando à lista
+            i++;  // Pula a aspa de fechamento
+        } else {
+            if (i + 1 < linha.length() && linha.charAt(i) == ',' && linha.charAt(i + 1) == ',') {
+                separa.add("NaN");
+                i += 2;  // Pula a vírgula dupla
+            } else {
+                StringBuilder aux = new StringBuilder();  // Usando StringBuilder
+                while (i < linha.length() && linha.charAt(i) != ',') {
+                    aux.append(linha.charAt(i));  // Adicionando ao StringBuilder
+                    i++;
+                }
+                separa.add(aux.toString());  // Convertendo para String e adicionando à lista
+            }
+        }
+        if (i < linha.length() && linha.charAt(i) == ',') {
+            i++;  // Pula a vírgula
+        }
+    }
+
+    for (int j = 0; j < separa.size(); j++) {
+        System.out.println(separa.get(j));
+    }
+}
+
+
 	//Função para ler o arquivo CSV e retorna numa String.
-	public static String leArquivo() {
+	public static void leArquivo(SHOW show) {
 		String linha = "", conteudo = "";
+		int aux = 0;
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("disneyplus.csv"));
 			while ((linha = br.readLine()) != null) {
-				conteudo += linha;
+				
+				conteudo = linha;
+				if(aux == 8){
+					show.atribuiValores(linha);
+				}
+
+				aux++;
 			}
 		} catch (Exception e) {
 			System.out.println("Erro!!");
 		}
-
-		return conteudo;
 	}
 
 	//Func Main
 	public static void main(String args[]) {
 		String conteudo = "";
 		Scanner sc = new Scanner(System.in);
-		SHOW teste = new SHOW();
-		conteudo = leArquivo();
-		
-		System.out.println(conteudo);
-
-		String separa[] = conteudo.split(",");
-		
-		teste.setID(separa[12]);
-		teste.setTYPE(separa[13]);
-		teste.setTITLE(separa[14]);
-		teste.setDIRECTOR(separa[15]);
-	//	teste.setCAST(separa[4]);
-		teste.setCOUNTRY(separa[17]);
-		teste.setDATE(separa[18]);
-//		teste.setRELEASE_YEAR(Integer.parseInt(separa[7]));
-	//	teste.setLISTED_IN(separa[8]);
-		teste.setDESCRIPTION(separa[23]);
-
-		//int idDesejado = sc.nextInt();
-		
-		System.out.println("ID = " + teste.SHOW_ID);
-		System.out.println("TYPE = " + teste.TYPE);
-		System.out.println("TITLE = " + teste.TITLE);
-		System.out.println("DIRECTOR = " + teste.DIRECTOR);
-		System.out.println("COUNTRY = " + teste.COUNTRY);
-		System.out.println("DATE = " + teste.DATE_ADDED);
-	//	System.out.println("ANO = " + teste.REALEASE_YEAR);
-		System.out.println("DESCRICAO = " + teste.DESCRIPTION);
+		SHOW show = new SHOW();
+		leArquivo(show);
 
 	}
 }
-
