@@ -111,9 +111,10 @@ class SHOW {
 	
 
 
-	public void atribuiValores (String linha){
+	public static SHOW atribuiValores (String linha){
 		
 		int i = 0;
+		SHOW show = new SHOW();
 		ArrayList<String> separa = new ArrayList<>();
 		
 		//--------------------------------------------------------
@@ -150,25 +151,35 @@ class SHOW {
 			}
 		}
 
-		for (int j = 0 ; j < separa.size(); j++){
-			System.out.println(separa.get(j));
-		}
+		show.setID(separa.get(0));
+		show.setTYPE(separa.get(1));
+		show.setTITLE(separa.get(2));
+		show.setDIRECTOR(separa.get(3));
+		//show.setCAST(separa.get(4));
+		show.setCOUNTRY(separa.get(5));
+		show.setDATE(separa.get(6));
+		show.setRELEASE_YEAR(Integer.parseInt(separa.get(7)));
+		show.setRATING(separa.get(8));
+		show.setDURATION(separa.get(9));
+		//show.setLISTED_IN(separa.get(10));
+		show.setDESCRIPTION(separa.get(11));
 
 
+		return show;
 	}
 
 	//Função para ler o arquivo CSV e retorna numa String.
-	public static String leArquivo(SHOW show) {
+	public static ArrayList <SHOW> leArquivo() {
 		String linha = "", conteudo = "";
 		int aux = 0;
+		ArrayList <SHOW> show = new ArrayList<>();
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("disneyplus.csv"));
 			while ((linha = br.readLine()) != null) {
 				
-				conteudo += linha;
-				if(aux == 16){
-					show.atribuiValores(linha);
+				if(aux >= 1){
+					show.add(atribuiValores(linha));
 				}
 
 				aux++;
@@ -176,15 +187,19 @@ class SHOW {
 		} catch (Exception e) {
 			System.out.println("Erro!!");
 		}
-		return conteudo;
+
+		return show;
 	}
 
 	//Func Main
 	public static void main(String args[]) {
 		String conteudo = "";
 		Scanner sc = new Scanner(System.in);
-		SHOW show = new SHOW();
-		leArquivo(show);
+		ArrayList <SHOW> show = leArquivo();
+		int id;
+		System.out.println("Digite o id para retornar o titulo:");
+		id = sc.nextInt();
+		System.out.println(show.get(id - 1).TITLE);
 
 	}
 }
