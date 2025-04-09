@@ -127,7 +127,7 @@ class SHOW {
 				}
 				separado.add(aux.toString());
 			}
-			i++;
+			i+=2;
 		}
  
 		return separado;
@@ -179,6 +179,7 @@ class SHOW {
            			 i++;  // Pula a vírgula
 
        			}else{
+
 					StringBuilder aux = new StringBuilder();
 					while(i < linha.length() && linha.charAt(i) != ','){
 						aux.append(linha.charAt(i));
@@ -195,10 +196,6 @@ class SHOW {
 		}
 	}
 
-		for (int j = 0; j < separa.size(); j++){
-			System.out.println(separa.get(j));
-		}
-
 
 		show.setID(separa.get(0));
 		show.setTYPE(separa.get(1));
@@ -210,7 +207,7 @@ class SHOW {
 		show.setRELEASE_YEAR(Integer.parseInt(separa.get(7)));
 		show.setRATING(separa.get(8));
 		show.setDURATION(separa.get(9));
-		//show.setLISTED_IN(separa.get(10));
+		show.setLISTED_IN(splitArrays(separa.get(10)));
 		show.setDESCRIPTION(separa.get(11));
 
 
@@ -227,8 +224,7 @@ class SHOW {
 			BufferedReader br = new BufferedReader(new FileReader("disneyplus.csv"));
 			while ((linha = br.readLine()) != null) {
 				
-				if(aux >= 1){
-					System.out.println(linha);
+				if(aux >= 1 && aux <= 5){
 					show.add(atribuiValores(linha));
 				}
 
@@ -250,6 +246,10 @@ class SHOW {
 		System.out.println("Digite o id para retornar o titulo:");
 		id = sc.nextInt();
 		System.out.println(show.get(id - 1).TITLE);
+
+		for (int i = 0; i < show.get(id-1).CAST.size() + 1;i++){
+			System.out.println("Genero:" + show.get(id-1).LISTED_IN.get(i));
+		}
 
 	}
 }
