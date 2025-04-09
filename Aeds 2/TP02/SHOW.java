@@ -109,6 +109,29 @@ class SHOW {
 	}
 
 	
+	public static ArrayList<String> splitArrays (String frase){
+
+		ArrayList<String> separado = new ArrayList<>();
+		int i = 0;
+
+		while(i < frase.length()){
+
+			if(frase.equals("NaN")){
+				separado.add("NaN");
+				break;
+			}else{
+				StringBuilder aux = new StringBuilder();
+				while(i < frase.length() && frase.charAt(i) != ','){
+					aux.append(frase.charAt(i));
+					i++;
+				}
+				separado.add(aux.toString());
+			}
+			i++;
+		}
+ 
+		return separado;
+	}
 
 
 	public static SHOW atribuiValores (String linha){
@@ -126,18 +149,33 @@ class SHOW {
 			if(linha.charAt(i) == '"'){
 				i++;
 				StringBuilder aux = new StringBuilder();
-				while(i < linha.length() && linha.charAt(i) != '"'){
-					aux.append(linha.charAt(i));
-					i++;
+
+				String prox = "";
+
+				while(i+1 < linha.length()){
+					prox += linha.charAt(i);
+					prox += linha.charAt(i+1);
+
+					if(linha.charAt(i) == '"'){
+						if (linha.charAt(i+1) == ','){
+							i++;
+							break;
+						}
+						i++;
+					}
+						aux.append(linha.charAt(i));
+						i++;
+						prox = "";
 				}
-				separa.add(aux.toString());;
-				i++; //Pula a segunda aspas
+				separa.add(aux.toString());
+	
+				//Pula a segunda aspas
 			}else{
 
 			    if (i < linha.length() && linha.charAt(i) == ',') {
 				    if(linha.charAt(i+1) == ','){
 					    separa.add("NaN");
-				    }
+		}
            			 i++;  // Pula a vírgula
 
        			}else{
@@ -146,16 +184,27 @@ class SHOW {
 						aux.append(linha.charAt(i));
 						i++;
 					}
-					separa.add(aux.toString());
-				}
+				separa.add(aux.toString());
+			
+
 			}
+			
+		//	if(separa.size() == 11){
+		//		break;
+		//	}
 		}
+	}
+
+		for (int j = 0; j < separa.size(); j++){
+			System.out.println(separa.get(j));
+		}
+
 
 		show.setID(separa.get(0));
 		show.setTYPE(separa.get(1));
 		show.setTITLE(separa.get(2));
 		show.setDIRECTOR(separa.get(3));
-		//show.setCAST(separa.get(4));
+		show.setCAST(splitArrays(separa.get(4)));
 		show.setCOUNTRY(separa.get(5));
 		show.setDATE(separa.get(6));
 		show.setRELEASE_YEAR(Integer.parseInt(separa.get(7)));
@@ -179,6 +228,7 @@ class SHOW {
 			while ((linha = br.readLine()) != null) {
 				
 				if(aux >= 1){
+					System.out.println(linha);
 					show.add(atribuiValores(linha));
 				}
 
