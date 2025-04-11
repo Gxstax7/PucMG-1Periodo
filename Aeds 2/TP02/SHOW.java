@@ -171,7 +171,8 @@ class SHOW {
             }
             i += 2;
         }
-
+	
+	Collections.sort(separado);
         return separado;
     }
 

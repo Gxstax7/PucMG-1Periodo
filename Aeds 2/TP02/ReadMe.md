@@ -13,3 +13,5 @@ Obs: O código se encontra sem identação e com alguns comentários soltos/inut
 
 
 Commit 10/09/2025 - Show com clone e imprimir funcionando, resta agora para finalizar a questão somente a ordenação dos arraylists
+
+2-Commit 10/09/2025 - Código finalizado.
