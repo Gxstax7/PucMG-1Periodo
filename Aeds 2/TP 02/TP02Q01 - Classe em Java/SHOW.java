@@ -1,6 +1,10 @@
+// ---------------------------------------------------------------------------------------------------- //
+//Imports
 import java.util.*;
 import java.io.*;
 
+// ---------------------------------------------------------------------------------------------------- //
+//Inicio da classe
 class SHOW {
 
     private String SHOW_ID, TITLE, TYPE, DIRECTOR, COUNTRY, RATING, DURATION, DATE_ADDED;
@@ -8,6 +12,8 @@ class SHOW {
     private ArrayList<String> LISTED_IN = new ArrayList<>();
     private int RELEASE_YEAR;
 
+// ---------------------------------------------------------------------------------------------------- //
+//Structs Construtores, getters e setters
     public SHOW() {
         setID("");
         setTITLE("");
@@ -115,6 +121,8 @@ class SHOW {
         this.RELEASE_YEAR = RELEASE_YEAR;
     }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função responsavel por clonar e retornar um novo objeto com os mesmos atributos
     public SHOW clone() {
         SHOW clone = new SHOW();
         clone.setID(getID());
@@ -131,10 +139,13 @@ class SHOW {
         return clone;
     }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função para imprimir os shows enquanto não receber FIM
     public static void imprimir(ArrayList<SHOW> show, String IdDesejado) {
         SHOW escolhido = new SHOW();
         int i = 0;
 
+        //Encontra o show desejado
         while (i < show.size()) {
             if (IdDesejado.equals(show.get(i).getID())) {
                 escolhido = show.get(i).clone();
@@ -143,6 +154,7 @@ class SHOW {
             i++;
         }
 
+        //Imprimi o show
         if (i == show.size()) {
             System.out.println("Id nao encontrado");
         } else {
@@ -153,10 +165,12 @@ class SHOW {
         }
     }
 
+//Função responsavel por tratar campos entre aspas
     public static ArrayList<String> splitArrays(String frase) {
         ArrayList<String> separado = new ArrayList<>();
         int i = 0;
 
+        //Atribui NaN para a primeira (e unica) posição do array caso receba NaN
         while (i < frase.length()) {
             if (frase.equals("NaN")) {
                 separado.add("NaN");
@@ -172,10 +186,14 @@ class SHOW {
             i += 2;
         }
 	
-	Collections.sort(separado);
+        //Ordena o array
+	    Collections.sort(separado);
+
         return separado;
     }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função para separar e destrinchar as linhas do arquivo
     public static SHOW atribuiValores(String linha) {
         int i = 0;
         SHOW show = new SHOW();
@@ -221,6 +239,7 @@ class SHOW {
             }
         }
 
+        //Atribui os valores
         show.setID(separa.get(0));
         show.setTYPE(separa.get(1));
         show.setTITLE(separa.get(2));
@@ -236,6 +255,8 @@ class SHOW {
         return show;
     }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função para ler o arquivo
     public static ArrayList<SHOW> ler() {
         String linha = "";
         int aux = 0;
@@ -244,6 +265,7 @@ class SHOW {
         try {
             BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
             while ((linha = br.readLine()) != null) {
+                //Ignora a primeira linha (nome das categorias)
                 if (aux >= 1) {
                     show.add(atribuiValores(linha));
                 }
@@ -257,6 +279,8 @@ class SHOW {
         return show;
     }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função Main
     public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
         ArrayList<SHOW> show = ler();
