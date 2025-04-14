@@ -28,12 +28,14 @@ typedef struct SHOW{
 
 // ---------------------------------------------------------------------------------------------------- //
 //Prototipos das funções
-Date converteData(char*);
-char** splitArrays(char*);
+SHOW * ler(int*);
 SHOW separa(char*);
-SHOW * ler();
+char** splitArrays(char*);
+char** ordenaArrays(char**);
+Date converteData(char*);
 void imprimirShow(SHOW);
 SHOW clone (SHOW*, char*);
+void liberarShow(SHOW);
 
 
 // ---------------------------------------------------------------------------------------------------- //
@@ -41,91 +43,70 @@ SHOW clone (SHOW*, char*);
 //Main
 int main(){
 
-    SHOW * show = ler();
+    int numShow = 0; //Variavel criada para futuro desalocamento de memoria
+    SHOW * show = ler(&numShow);
+
     char idDesejado[10];
     fgets(idDesejado, 10, stdin);
     idDesejado[strcspn(idDesejado, "\n")] = '\0';
 
     while(strcmp(idDesejado, "FIM") != 0){
-        clone(show, idDesejado);
+
+        SHOW showClonado = clone(show, idDesejado);
+        imprimirShow(showClonado);
+        printf("\n");
+        liberarShow(showClonado); //Desaloca memoria do clone
+
         fgets(idDesejado, 10, stdin);
         idDesejado[strcspn(idDesejado, "\n")] = '\0';
     }
+
+    //Desalocamento de memoria
+    for (int i = 0; i < numShow; i++) {
+        liberarShow(show[i]);
+    }
+    free(show);
 
     return 0;
 }
 
 
 
-//+-+-+--+-+-+-+ Funções +-+-+--+-+-+-+
+//+-+-+--+-+-+-+-+-+-+--+-+-+-+-+-+-+--+-+-+-+-+-+-+--+-+-+-+-+-+-+--+-+-+-+Funções +-+-+--+-+-+-+-+-+-+--+-+-+-+-+-+-+--+-+-+-+-+-+-+--+-+-+-+-+-+-+--+-+-+-+
 
-
-//+-+-+--+-+-+-+ Função para ordenar um array de Strings +-+-+--+-+-+-+
-SHOW * ler(){
-
-    SHOW * show;
-    FILE *arq = fopen("disneyplus.csv", "rb");
-    char texto[2000];
-    int aux = 0, tam = 0;
-
-    while(fgets(texto,sizeof(texto), arq) != NULL){
-        if(aux >= 1){
-            show = realloc(show, (tam + 1) * sizeof(SHOW));
-            printf("%s", texto);
-            show[tam] = separa(texto);
-            tam++;
-        }else{
-            show = NULL;
-        }
-
-        aux++;
-    }
-
-    return show;
-
-}
 
 // ---------------------------------------------------------------------------------------------------- //
-//Função para realizar a separação dos campos com arrays de string
+//Função para realizar a leitura do arquivo
+SHOW * ler(int *quantidade){
 
-char ** splitArrays(char* linha){
+    SHOW * show;
+    FILE *arq = fopen("/tmp/disneyplus.csv", "rb");
+    char texto[4000];
+    int aux = 0, tam = 0;
 
-    char **separado = NULL;
-    int i = 0, count = 0, tam = 0;
-
-    //Retorna apenas NaN caso não tenha atributos
-    if(strcmp(linha,"NaN") == 0){
-        separado = (char**) malloc (1 * sizeof(char*));
-        separado[0] = malloc (4*sizeof(char));
-        strcpy(separado[0], "NaN");
-        return separado;
-    }
-
-    //Separa a cada virgula os atributos
-    while(i < strlen(linha)){
-            separado = realloc(separado, (tam + 1) * sizeof(char*));
-            int j = 0;
-            char aux[100] = "";
-
-            while(i < strlen(linha) && linha[i] != ','){
-                aux[j] = linha[i];
-                i++;
-                j++;
+    //Verifia se o arquivo foi aberto com sucesso
+    if(arq == NULL){
+        printf("Erro na leitura!!\n");
+        exit(1);
+    }else{
+        while(fgets(texto,sizeof(texto), arq) != NULL){
+            //Ignora a primeira linha (nome das categorias)
+            if(aux >= 1){
+                show = realloc(show, (tam + 1) * sizeof(SHOW));
+                show[tam] = separa(texto);
+                tam++;
+            }else{
+                show = NULL;
             }
 
-            if(linha[i] == ',')
-                i+=2;
-
-            separado[tam] = (char*) malloc ((strlen(aux) + 1) * sizeof(char));
-            strcpy(separado[tam], aux);
-            tam++;
+            aux++;
+        }
     }
 
-    //Coloca Null no final para controle de exibição
-    separado = realloc(separado, (tam + 1) * sizeof(char*));
-    separado[tam] = NULL;
+    *quantidade = aux - 1;
+    fclose(arq);
 
-    return separado;
+    return show;
 
 }
 
@@ -134,11 +115,12 @@ char ** splitArrays(char* linha){
 SHOW separa(char *linha) {
     SHOW show;
     int i = 0;
-    char separa[11][100];
+    char separa[11][1000];
     int indexSepara = 0;
 
     while (i < strlen(linha) && indexSepara < 11) {
 
+        //Tratamento de campos com "
         if (linha[i] == '"') {
             i++;
             int j = 0;
@@ -169,6 +151,7 @@ SHOW separa(char *linha) {
 
         }else{
 
+            //Atribui NaN para campo vazio
             if(i < strlen(linha) && linha[i] == ','){
                 if(i + 1 < strlen(linha) && linha[i+1] == ','){
                     strcpy(separa[indexSepara], "NaN");
@@ -194,11 +177,6 @@ SHOW separa(char *linha) {
 
     }
 
-    for (int index = 0; index < indexSepara; index++){
-        printf("\n%s", separa[index]);
-    }
-
-
     //Atribuição para os campos da struct
     strncpy(show.SHOW_ID, separa[0], sizeof(show.SHOW_ID) - 1);
     strncpy(show.TYPE, separa[1], sizeof(show.TYPE) - 1);
@@ -216,21 +194,107 @@ SHOW separa(char *linha) {
 
 }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função para realizar a separação dos campos com arrays de string
+
+char ** splitArrays(char* linha){
+
+    char **separado = NULL;
+    int i = 0, count = 0, tam = 0;
+
+    //Retorna apenas NaN caso não tenha atributos
+    if(strcmp(linha,"NaN") == 0){
+        separado = (char**) malloc (2 * sizeof(char*));
+        separado[0] = malloc (4*sizeof(char));
+        strcpy(separado[0], "NaN");
+        separado[1] = NULL;
+        return separado;
+    }
+
+    //Separa a cada virgula  os atributos
+    while(i < strlen(linha)){
+            separado = realloc(separado, (tam + 1) * sizeof(char*));
+            int j = 0;
+            char aux[100] = "";
+
+            while(i < strlen(linha) && linha[i] != ','){
+                aux[j] = linha[i];
+                i++;
+                j++;
+            }
+
+            if(linha[i] == ',')
+                i+=2;
+
+            separado[tam] = (char*) malloc ((strlen(aux) + 1) * sizeof(char));
+            strcpy(separado[tam], aux);
+            tam++;
+    }
+
+    //Coloca Null no final para controle de exibição
+    separado = realloc(separado, (tam + 1) * sizeof(char*));
+    separado[tam] = NULL;
+    separado = ordenaArrays(separado);
+
+    return separado;
+
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+//Função para realizar a ordenação do array de string
+
+char** ordenaArrays(char** array) {
+    int tam = 0;
+    while (array[tam] != NULL) {
+        tam++;
+    }
+
+    // Aloca array de ponteiros
+    char** ordenado = (char**)malloc((tam + 1) * sizeof(char*));
+
+    // Copia o array para o novo que sera retornado
+    for (int i = 0; i < tam; i++) {
+        ordenado[i] = (char*)malloc(strlen(array[i]) + 1);
+        strcpy(ordenado[i], array[i]);
+    }
+    ordenado[tam] = NULL;
+
+    // Ordena o array copiado
+    for (int i = 0; i < tam - 1; i++) {
+        for (int j = i + 1; j < tam; j++) {
+            if (strcmp(ordenado[i], ordenado[j]) > 0) {
+                char* temp = ordenado[i];
+                ordenado[i] = ordenado[j];
+                ordenado[j] = temp;
+            }
+        }
+    }
+
+    return ordenado;
+}
+
+// ---------------------------------------------------------------------------------------------------- //
+//Preencher a data do show de acordo com os padrões da struct
+
 Date converteData(char* dataPadrao){
 
     Date dataConvertida;
     int i = 0;
 
+    //Caso receba NaN (campo vazio), retorna a data como March 1, 1900
     if(strcmp(dataPadrao,"NaN") == 0){
         dataConvertida.ano = 1900;
         dataConvertida.dia = 1;
-        dataConvertida.mes = "March";
+        dataConvertida.dia = 1;
+        dataConvertida.mes = malloc(6 * sizeof(char));
+        strcpy(dataConvertida.mes, "March");
         return dataConvertida;
     }
 
     while(i < strlen(dataPadrao)){
             int j = 0;
 
+            //Atribui o mes, lendo até o espaço, de acordo com o padrão do arquivo
             char aux[100] = "";
             while(i < strlen(dataPadrao) && dataPadrao[i] != ' '){
                 aux[j] = dataPadrao[i];
@@ -243,6 +307,7 @@ Date converteData(char* dataPadrao){
             j = 0;
 
 
+            //Atribui o dia, lendo até a virgula, de acordo com o padrão do arquivo
             char auxDia[3];
             while(i < strlen(dataPadrao) && dataPadrao[i] != ','){
                 auxDia[j] = dataPadrao[i];
@@ -250,10 +315,13 @@ Date converteData(char* dataPadrao){
                 j++;
             }
             i++;
-            dataConvertida.dia = atoi(auxDia);
             j = 0;
 
+            // Converte para inteiro
+            dataConvertida.dia = atoi(auxDia);
 
+
+            //Atribui o ano
             char auxAno[5];
             while(i < strlen(dataPadrao)){
                 auxAno[j] = dataPadrao[i];
@@ -261,6 +329,8 @@ Date converteData(char* dataPadrao){
                 j++;
             }
             auxAno[j] = '\0';
+
+            // Converte para inteiro
             dataConvertida.ano = atoi(auxAno);
             }
 
@@ -268,11 +338,49 @@ Date converteData(char* dataPadrao){
 
 }
 
+// ---------------------------------------------------------------------------------------------------- //
+//Função para imprimir o show
+
 void imprimirShow(SHOW show){
 
+    printf("=> %s ## %s ## %s ## %s ## [",
+           show.SHOW_ID,
+           show.TITLE,
+           show.TYPE,
+           show.DIRECTOR);
 
+    //Imprimi o elenco
+    for(int i = 0; show.CAST[i] != NULL; i++){
+        //Verifica se é o ultimo para não adicionar ,
+        if(show.CAST[i+1] == NULL){
+            printf("%s", show.CAST[i]);
+        }else{
+            printf("%s, ", show.CAST[i]);
+        }
+    }
 
+    printf("] ## %s ## %s %d, %d ## %d ## %s ## %s ## [",
+           show.COUNTRY,
+           show.DATA.mes, show.DATA.dia, show.DATA.ano,
+           show.RELEASE_YEAR,
+           show.RATING,
+           show.DURATION);
+
+    //Imprimi o listed_in
+    for(int i = 0; show.LISTED_IN[i] != NULL; i++){
+        //Verifica se é o ultimo para não adicionar ,
+        if(show.LISTED_IN[i+1] == NULL){
+            printf("%s", show.LISTED_IN[i]);
+        }else{
+            printf("%s, ", show.LISTED_IN[i]);
+        }
+    }
+
+    printf("] ##");
 }
+
+// ---------------------------------------------------------------------------------------------------- //
+//Função para retornar um clone do objeto
 
 SHOW clone(SHOW * show, char* idChar){
 
@@ -280,16 +388,20 @@ SHOW clone(SHOW * show, char* idChar){
     int id, i = 1, j = 0;
     char aux[10]= "";
 
+    //Transforma o id em int para acesso ao index do show
     while(i < strlen(idChar)){
         aux[j] = idChar[i];
         j++;
         i++;
     }
     id = atoi(aux) - 1;
-    printf("\n\nShow clonado: %d\n", id);
 
+    //Clona os campos simples
+    clonado.DATA.dia = show[id].DATA.dia;
+    clonado.DATA.ano = show[id].DATA.ano;
+    clonado.DATA.mes = (char*)malloc(strlen(show[id].DATA.mes) + 1);
+    strcpy(clonado.DATA.mes, show[id].DATA.mes);
     strcpy(clonado.COUNTRY, show[id].COUNTRY);
-    clonado.DATA = show[id].DATA;
     strcpy(clonado.DIRECTOR, show[id].DIRECTOR);
     strcpy(clonado.DURATION, show[id].DURATION);
     strcpy(clonado.RATING, show[id].RATING);
@@ -298,9 +410,51 @@ SHOW clone(SHOW * show, char* idChar){
     strcpy(clonado.TITLE, show[id].TITLE);
     strcpy(clonado.TYPE, show[id].TYPE);
 
-    //strcpy(clonado.LISTED_IN, show[id].LISTED_IN);
-    //strcpy(clonado.CAST, show[id].CAST);
+
+    //Clona o cast
+    int castTam = 0;
+    while (show[id].CAST[castTam] != NULL){
+        castTam++;
+    }
+    clonado.CAST = (char**)malloc((castTam + 1) * sizeof(char*));
+
+    for (int i = 0; i < castTam; i++) {
+        clonado.CAST[i] = (char*)malloc(strlen(show[id].CAST[i]) + 1);
+        strcpy(clonado.CAST[i], show[id].CAST[i]);
+    }
+    clonado.CAST[castTam] = NULL;
+
+
+    //Clona o LISTED_IN
+    int listedInTam = 0;
+    while (show[id].LISTED_IN[listedInTam] != NULL){
+        listedInTam++;
+    }
+    clonado.LISTED_IN = (char**)malloc((listedInTam + 1) * sizeof(char*));
+
+    for (int i = 0; i < listedInTam; i++) {
+        clonado.LISTED_IN[i] = (char*)malloc(strlen(show[id].LISTED_IN[i]) + 1);
+        strcpy(clonado.LISTED_IN[i], show[id].LISTED_IN[i]);
+    }
+    clonado.LISTED_IN[listedInTam] = NULL;
 
     return clonado;
 
+}
+
+void liberarShow(SHOW show) {
+    // Libera o CAST
+    for (int i = 0; show.CAST[i] != NULL; i++) {
+        free(show.CAST[i]);
+    }
+    free(show.CAST);
+
+    // Libera o LISTED_IN
+    for (int i = 0; show.LISTED_IN[i] != NULL; i++) {
+        free(show.LISTED_IN[i]);
+    }
+    free(show.LISTED_IN);
+
+    // Libera o mês (Date.mes)
+    free(show.DATA.mes);
 }
