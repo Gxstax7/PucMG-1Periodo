@@ -9,6 +9,7 @@ import java.time.*;
 class SHOW {
 
 	private static Log log = new Log();
+
     private String SHOW_ID, TITLE, TYPE, DIRECTOR, COUNTRY, RATING, DURATION, DATE_ADDED;
     private ArrayList<String> CAST = new ArrayList<>();
     private ArrayList<String> LISTED_IN = new ArrayList<>();
@@ -281,6 +282,19 @@ class SHOW {
         return show;
     }
     
+    
+// ---------------------------------------------------------------------------------------------------- //
+//Função swap
+
+    public static void swapShows (ArrayList<SHOW> show, int i, int menor){
+	
+	SHOW temp = show.get(i).clone();
+	show.set(i, show.get(menor));
+	show.set(menor, temp);
+	log.addMov(3);
+    }
+
+
 // ---------------------------------------------------------------------------------------------------- //
 //Função para realizar a pesquisa sequencial
 
@@ -297,6 +311,34 @@ class SHOW {
 	return false;
 
     }
+
+
+// ---------------------------------------------------------------------------------------------------- //
+//Função para realizar a ordenação por seleção
+
+    public static void ordenaSelecao (ArrayList<SHOW> show){
+	
+	int length = show.size();
+
+	for (int i = 0; i < length - 1; i++){
+		String menorShow = show.get(i).getTITLE();
+		int indexMenor = i;
+
+		for(int j = i + 1; j < length; j++){
+
+			log.addComp();
+			if(menorShow.compareToIgnoreCase(show.get(j).getTITLE()) > 0){
+				menorShow = show.get(j).getTITLE();
+				indexMenor = j;
+			}
+		}
+
+		swapShows(show, i, indexMenor);
+
+	}
+
+    }
+
 
 // ---------------------------------------------------------------------------------------------------- //
 //Função Main
@@ -320,20 +362,19 @@ class SHOW {
 	    }
 	    idDesejado = sc.nextLine();
         }
-
-	titleDesejado = sc.nextLine();
 	
-	//Pesquisa sequencial
+	//Ordenação via seleção
 	//Incializa o timer
 	timer.start();
 
-	while(!titleDesejado.equals("FIM")){
-	    System.out.println(pesquisaSequencial(showClonado, titleDesejado) ? "SIM" : "NAO");	
-	    titleDesejado = sc.nextLine();
-	}
-	
+	ordenaSelecao(showClonado);
+
 	//Finaliza o timer
 	timer.stop();
+
+	for(int i = 0; i < showClonado.size(); i++){
+		imprimir(showClonado, showClonado.get(i).getID());
+	}
 
 	try{
 		log.createLog("866018_sequencial.txt", timer);
@@ -381,7 +422,7 @@ class Log{
 
 	public void createLog(String nameFile, Timer timer) throws IOException{
 		PrintWriter writer = new PrintWriter (nameFile, "UTF-8");
-		writer.println("Matricula: 866018\tTempo: " + timer.getTime() + "\t" + "Comparações: " + this.comp);
+		writer.println("Matricula: 866018" + "\t" + "Tempo: " + timer.getTime() + "\t" + "Comparações: " + this.comp + "\t" + "Movimentações: " + mov);
 		writer.close();
 	}
 }
