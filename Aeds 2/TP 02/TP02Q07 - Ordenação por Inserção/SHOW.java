@@ -1,14 +1,14 @@
 // ---------------------------------------------------------------------------------------------------- //
-//Imports
+// Imports
 import java.util.*;
 import java.io.*;
 import java.time.*;
 
 // ---------------------------------------------------------------------------------------------------- //
-//Inicio da classe
+// Início da classe
 class SHOW {
 
-	private static Log log = new Log();
+    private static Log log = new Log();
 
     private String SHOW_ID, TITLE, TYPE, DIRECTOR, COUNTRY, RATING, DURATION, DATE_ADDED;
     private ArrayList<String> CAST = new ArrayList<>();
@@ -16,7 +16,7 @@ class SHOW {
     private int RELEASE_YEAR;
 
 // ---------------------------------------------------------------------------------------------------- //
-//Structs Construtores, getters e setters
+// Construtores, getters e setters
     public SHOW() {
         setID("");
         setTITLE("");
@@ -47,85 +47,41 @@ class SHOW {
         setLISTED_IN(LISTED_IN);
     }
 
-    public String getID() {
-        return SHOW_ID;
-    }
-    public void setID(String SHOW_ID) {
-        this.SHOW_ID = SHOW_ID;
-    }
+    public String getID() { return SHOW_ID; }
+    public void setID(String SHOW_ID) { this.SHOW_ID = SHOW_ID; }
 
-    public String getDATE() {
-        return DATE_ADDED;
-    }
-    public void setDATE(String DATE_ADDED) {
-        this.DATE_ADDED = DATE_ADDED;
-    }
+    public String getDATE() { return DATE_ADDED; }
+    public void setDATE(String DATE_ADDED) { this.DATE_ADDED = DATE_ADDED; }
 
-    public String getTITLE() {
-        return TITLE;
-    }
-    public void setTITLE(String TITLE) {
-        this.TITLE = TITLE;
-    }
+    public String getTITLE() { return TITLE; }
+    public void setTITLE(String TITLE) { this.TITLE = TITLE; }
 
-    public String getTYPE() {
-        return TYPE;
-    }
-    public void setTYPE(String TYPE) {
-        this.TYPE = TYPE;
-    }
+    public String getTYPE() { return TYPE; }
+    public void setTYPE(String TYPE) { this.TYPE = TYPE; }
 
-    public String getDIRECTOR() {
-        return DIRECTOR;
-    }
-    public void setDIRECTOR(String DIRECTOR) {
-        this.DIRECTOR = DIRECTOR;
-    }
+    public String getDIRECTOR() { return DIRECTOR; }
+    public void setDIRECTOR(String DIRECTOR) { this.DIRECTOR = DIRECTOR; }
 
-    public String getCOUNTRY() {
-        return COUNTRY;
-    }
-    public void setCOUNTRY(String COUNTRY) {
-        this.COUNTRY = COUNTRY;
-    }
+    public String getCOUNTRY() { return COUNTRY; }
+    public void setCOUNTRY(String COUNTRY) { this.COUNTRY = COUNTRY; }
 
-    public String getRATING() {
-        return RATING;
-    }
-    public void setRATING(String RATING) {
-        this.RATING = RATING;
-    }
+    public String getRATING() { return RATING; }
+    public void setRATING(String RATING) { this.RATING = RATING; }
 
-    public String getDURATION() {
-        return DURATION;
-    }
-    public void setDURATION(String DURATION) {
-        this.DURATION = DURATION;
-    }
+    public String getDURATION() { return DURATION; }
+    public void setDURATION(String DURATION) { this.DURATION = DURATION; }
 
-    public ArrayList<String> getCAST() {
-        return CAST;
-    }
-    public void setCAST(ArrayList<String> CAST) {
-        this.CAST = CAST;
-    }
+    public ArrayList<String> getCAST() { return CAST; }
+    public void setCAST(ArrayList<String> CAST) { this.CAST = CAST; }
 
-    public ArrayList<String> getLISTED_IN() {
-        return LISTED_IN;
-    }
-    public void setLISTED_IN(ArrayList<String> LISTED_IN) {
-        this.LISTED_IN = LISTED_IN;
-    }
+    public ArrayList<String> getLISTED_IN() { return LISTED_IN; }
+    public void setLISTED_IN(ArrayList<String> LISTED_IN) { this.LISTED_IN = LISTED_IN; }
 
-    public int getRELEASE_YEAR() {
-        return RELEASE_YEAR;
-    }
-    public void setRELEASE_YEAR(int RELEASE_YEAR) {
-        this.RELEASE_YEAR = RELEASE_YEAR;
-    }
+    public int getRELEASE_YEAR() { return RELEASE_YEAR; }
+    public void setRELEASE_YEAR(int RELEASE_YEAR) { this.RELEASE_YEAR = RELEASE_YEAR; }
 
 // ---------------------------------------------------------------------------------------------------- //
-//Função responsavel por clonar e retornar um novo objeto com os mesmos atributos
+// Função responsável por clonar e retornar um novo objeto com os mesmos atributos
     public SHOW clone() {
         SHOW clone = new SHOW();
         clone.setID(getID());
@@ -143,12 +99,11 @@ class SHOW {
     }
 
 // ---------------------------------------------------------------------------------------------------- //
-//Função para imprimir os shows enquanto não receber FIM
+// Imprime show pelo ID
     public static void imprimir(ArrayList<SHOW> show, String IdDesejado) {
         SHOW escolhido = new SHOW();
         int i = 0;
 
-        //Encontra o show desejado
         while (i < show.size()) {
             if (IdDesejado.equals(show.get(i).getID())) {
                 escolhido = show.get(i).clone();
@@ -157,7 +112,6 @@ class SHOW {
             i++;
         }
 
-        //Imprimi o show
         if (i == show.size()) {
             System.out.println("Id nao encontrado");
         } else {
@@ -168,12 +122,12 @@ class SHOW {
         }
     }
 
-//Função responsavel por tratar campos entre aspas
+// ---------------------------------------------------------------------------------------------------- //
+// Tratamento de campos entre aspas
     public static ArrayList<String> splitArrays(String frase) {
         ArrayList<String> separado = new ArrayList<>();
         int i = 0;
 
-        //Atribui NaN para a primeira (e unica) posição do array caso receba NaN
         while (i < frase.length()) {
             if (frase.equals("NaN")) {
                 separado.add("NaN");
@@ -188,15 +142,13 @@ class SHOW {
             }
             i += 2;
         }
-	
-        //Ordena o array
-	    Collections.sort(separado);
 
+        Collections.sort(separado);
         return separado;
     }
 
 // ---------------------------------------------------------------------------------------------------- //
-//Função para separar e destrinchar as linhas do arquivo
+// Processa linha do CSV
     public static SHOW atribuiValores(String linha) {
         int i = 0;
         SHOW show = new SHOW();
@@ -206,31 +158,21 @@ class SHOW {
             if (linha.charAt(i) == '"') {
                 i++;
                 StringBuilder aux = new StringBuilder();
-                String prox = "";
-
                 while (i + 1 < linha.length()) {
-                    prox += linha.charAt(i);
-                    prox += linha.charAt(i + 1);
-
-                    if (linha.charAt(i) == '"') {
-                        if (linha.charAt(i + 1) == ',') {
-                            i++;
-                            break;
-                        }
+                    if (linha.charAt(i) == '"' && linha.charAt(i + 1) == ',') {
                         i++;
+                        break;
                     }
                     aux.append(linha.charAt(i));
                     i++;
-                    prox = "";
                 }
-
                 separa.add(aux.toString());
             } else {
                 if (i < linha.length() && linha.charAt(i) == ',') {
                     if (linha.charAt(i + 1) == ',') {
                         separa.add("NaN");
                     }
-                    i++; // Pula a vírgula
+                    i++;
                 } else {
                     StringBuilder aux = new StringBuilder();
                     while (i < linha.length() && linha.charAt(i) != ',') {
@@ -242,7 +184,6 @@ class SHOW {
             }
         }
 
-        //Atribui os valores
         show.setID(separa.get(0));
         show.setTYPE(separa.get(1));
         show.setTITLE(separa.get(2));
@@ -259,16 +200,15 @@ class SHOW {
     }
 
 // ---------------------------------------------------------------------------------------------------- //
-//Função para ler o arquivo
+// Leitura do arquivo
     public static ArrayList<SHOW> ler() {
-        String linha = "";
+        String linha;
         int aux = 0;
         ArrayList<SHOW> show = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader("/tmp/disneyplus.csv"));
             while ((linha = br.readLine()) != null) {
-                //Ignora a primeira linha (nome das categorias)
                 if (aux >= 1) {
                     show.add(atribuiValores(linha));
                 }
@@ -281,149 +221,151 @@ class SHOW {
 
         return show;
     }
-    
-    
-// ---------------------------------------------------------------------------------------------------- //
-//Função swap
 
-    public static void swapShows (ArrayList<SHOW> show, int i, int menor){
-	
-	SHOW temp = show.get(i).clone();
-	show.set(i, show.get(menor));
-	show.set(menor, temp);
-	log.addMov(3);
+// ---------------------------------------------------------------------------------------------------- //
+// Swap
+    public static void swapShows(ArrayList<SHOW> show, int i, int menor) {
+        SHOW temp = show.get(i).clone();
+        show.set(i, show.get(menor));
+        show.set(menor, temp);
+        log.addMov(3);
     }
 
-
 // ---------------------------------------------------------------------------------------------------- //
-//Função para realizar a pesquisa sequencial
-
-    public static boolean pesquisaSequencial(ArrayList<SHOW> show, String title){
-    	
-	for(int i = 0; i < show.size(); i++){
-
-		log.addComp();
-		if(show.get(i).getTITLE().equals(title)){
-			return true;
-		}
-	}
-
-	return false;
-
+// Pesquisa sequencial
+    public static boolean pesquisaSequencial(ArrayList<SHOW> show, String title) {
+        for (int i = 0; i < show.size(); i++) {
+            log.addComp();
+            if (show.get(i).getTITLE().equals(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-
 // ---------------------------------------------------------------------------------------------------- //
-//Função para realizar a ordenação por seleção
+// Ordenação por seleção (baseada em TITLE)
+    public static void ordenaSelecao(ArrayList<SHOW> show) {
+        int length = show.size();
 
-    public static void ordenaSelecao (ArrayList<SHOW> show){
-	
-	int length = show.size();
+        for (int i = 0; i < length - 1; i++) {
+            String menorShow = show.get(i).getTITLE();
+            int indexMenor = i;
 
-	for (int i = 0; i < length - 1; i++){
-		String menorShow = show.get(i).getTITLE();
-		int indexMenor = i;
+            for (int j = i + 1; j < length; j++) {
+                log.addComp();
+                if (menorShow.compareToIgnoreCase(show.get(j).getTITLE()) > 0) {
+                    menorShow = show.get(j).getTITLE();
+                    indexMenor = j;
+                }
+            }
 
-		for(int j = i + 1; j < length; j++){
-
-			log.addComp();
-			if(menorShow.compareToIgnoreCase(show.get(j).getTITLE()) > 0){
-				menorShow = show.get(j).getTITLE();
-				indexMenor = j;
-			}
-		}
-
-		swapShows(show, i, indexMenor);
-
-	}
-
+            swapShows(show, i, indexMenor);
+        }
     }
 
+// ---------------------------------------------------------------------------------------------------- //
+// Ordenação por inserção (por TYPE e, em empate, por TITLE)
+    public static void ordenaInsercao(ArrayList<SHOW> show) {
+        int length = show.size();
+
+        for (int i = 1; i < length; i++) {
+            SHOW aux = show.get(i);
+            int j = i - 1;
+
+            log.addComp();
+            while (j >= 0 && (
+                    aux.getTYPE().compareToIgnoreCase(show.get(j).getTYPE()) < 0 ||
+                    (aux.getTYPE().equalsIgnoreCase(show.get(j).getTYPE()) &&
+                     aux.getTITLE().compareToIgnoreCase(show.get(j).getTITLE()) < 0)
+            )) {
+                show.set(j + 1, show.get(j));
+                j--;
+                log.addMov();
+            }
+
+            show.set(j + 1, aux);
+            log.addMov();
+        }
+    }
 
 // ---------------------------------------------------------------------------------------------------- //
-//Função Main
+// Função main
     public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
         ArrayList<SHOW> show = ler();
-	ArrayList<SHOW> showClonado = new ArrayList<>();
+        ArrayList<SHOW> showClonado = new ArrayList<>();
         String idDesejado = sc.nextLine();
-	String titleDesejado = "";
 
-	Timer timer = new Timer();
+        Timer timer = new Timer();
 
-	//While para criar o array de shows em que a pesquisa sera realizada
         while (!idDesejado.equals("FIM")) {
-            for(int i = 0; i < show.size(); i++){
-	
-	        if(show.get(i).getID().equals(idDesejado)){
-		    showClonado.add(show.get(i).clone());
-		}
-	    
-	    }
-	    idDesejado = sc.nextLine();
+            for (int i = 0; i < show.size(); i++) {
+                if (show.get(i).getID().equals(idDesejado)) {
+                    showClonado.add(show.get(i).clone());
+                }
+            }
+            idDesejado = sc.nextLine();
         }
-	
-	//Ordenação via seleção
-	//Incializa o timer
-	timer.start();
 
-	ordenaSelecao(showClonado);
+        timer.start();
+        ordenaInsercao(showClonado);
+        timer.stop();
 
-	//Finaliza o timer
-	timer.stop();
+        for (SHOW s : showClonado) {
+            imprimir(showClonado, s.getID());
+        }
 
-	for(int i = 0; i < showClonado.size(); i++){
-		imprimir(showClonado, showClonado.get(i).getID());
-	}
+        try {
+            log.createLog("866018_insercao.txt", timer);
+        } catch (IOException e) {
+            System.out.println("Erro na criação do log!!");
+        }
 
-	try{
-		log.createLog("866018_selecao.txt", timer);
-	}catch(IOException e){
-		System.out.println("Erro na criação do log!!");
-	}
         sc.close();
     }
 }
 
-
 // ---------------------------------------------------------------------------------------------------- //
-//Criação do Timer e do Log
-class Timer{
+// Timer e Log
+class Timer {
+    private Instant fim, inicio;
 
-	private Instant fim, inicio;
-	
-	Timer(){}
-	public void start (){ this.inicio = Instant.now(); }
-	public void stop () { this.fim = Instant.now(); }
-	public double getTime() { return Duration.between(inicio, fim).toMillis() / 1000.0 ; }
+    Timer() {}
+
+    public void start() { this.inicio = Instant.now(); }
+    public void stop() { this.fim = Instant.now(); }
+    public double getTime() { return Duration.between(inicio, fim).toMillis() / 1000.0; }
 }
 
-class Log{
-	
-	private int comp, mov;
+class Log {
+    private int comp, mov;
 
-	Log(){
-		comp = 0;
-		mov = 0;
-	}
+    Log() {
+        comp = 0;
+        mov = 0;
+    }
 
-	Log(int comp, int mov){
-		this.comp = comp;
-		this.mov = mov;
-	}
-	
-	public void addComp(){ this.comp++;}
-	public void addMov(){ this.mov++;}
-	public void addComp(int comp) { this.comp += comp; }
-	public void addMov(int mov) { this.mov += mov; }
+    Log(int comp, int mov) {
+        this.comp = comp;
+        this.mov = mov;
+    }
 
-	public void setComp(int comp){ this.comp = comp;}
-	public int getComp(){return comp;}
+    public void addComp() { this.comp++; }
+    public void addMov() { this.mov++; }
+    public void addComp(int comp) { this.comp += comp; }
+    public void addMov(int mov) { this.mov += mov; }
 
-	public void createLog(String nameFile, Timer timer) throws IOException{
-		PrintWriter writer = new PrintWriter (nameFile, "UTF-8");
-		writer.println("Matricula: 866018" + "\t" + "Tempo: " + timer.getTime() + "\t" + "Comparações: " + this.comp + "\t" + "Movimentações: " + mov);
-		writer.close();
-	}
+    public void setComp(int comp) { this.comp = comp; }
+    public int getComp() { return comp; }
+
+    public void createLog(String nameFile, Timer timer) throws IOException {
+        PrintWriter writer = new PrintWriter(nameFile, "UTF-8");
+        writer.println("Matricula: 866018" + "\t" +
+                       "Tempo: " + timer.getTime() + "\t" +
+                       "Comparações: " + this.comp + "\t" +
+                       "Movimentações: " + mov);
+        writer.close();
+    }
 }
 
