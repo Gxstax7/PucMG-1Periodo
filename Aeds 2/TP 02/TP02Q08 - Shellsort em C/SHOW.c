@@ -41,7 +41,8 @@ Date converteDATA(char*);
 void imprimirShow(SHOW);
 SHOW clone (SHOW*, char*);
 void liberarShow(SHOW);
-void bubbleSort (SHOW*, int);
+void shellSort (SHOW*, int);
+void inserirShell (SHOW*, int);
 void swap (SHOW*,int,int);
 bool pesquisaBinaria (SHOW*, char*, int, int);
 void createLog(double);
@@ -75,7 +76,7 @@ int main(){
     }
 
     clock_t inicioTempo = clock();
-    bubbleSort(clonado, tam);
+    shellSort(clonado, tam);
     clock_t fimTempo = clock();
 
     double duracao = ((double)(fimTempo-inicioTempo))/CLOCKS_PER_SEC;
@@ -501,13 +502,27 @@ void swap (SHOW * show, int i, int menor){
 
 }
 
-void bubbleSort (SHOW * show, int n){
+void shellSort(SHOW * show, int n){
 
-    for (int i = n-1; i > 0; i--){
+    int gap = 1;
 
-        for(int j = i-1; j >= 0; j--){
-            if(verificaMov(show[i], show[j])){
-                swap(show, i, j);
+    while(gap < n) gap = (gap * 3) + 1;
+
+    while (gap > 0) {
+
+        gap /= 3;
+        for(int i = 0; i < gap; i++){
+            for(int j = i + gap; j < n; j += gap){
+                SHOW tmp = show[j];
+                int k = j - gap;
+
+                while(k >= 0 && verificaMov(show[k], tmp) > 0){
+                    show[k + gap] = show [k];
+                    k -= gap;
+                    logMov++;
+                }
+                show[k + gap] = tmp;
+                logMov++;
             }
         }
 
@@ -515,63 +530,23 @@ void bubbleSort (SHOW * show, int n){
 
 }
 
+int verificaMov(SHOW show1, SHOW tmp){
 
-int verificaMov(SHOW show, SHOW pivo){
+    int comp = strcasecmp(show1.TYPE, tmp.TYPE);
+    int compTitle = strcasecmp(show1.TITLE, tmp.TITLE);
 
-
-    int mes1 = 0, mes2 = 0;
-
-    if (strcmp(show.DATA.mes, "January") == 0)   mes1 = 1;
-    if (strcmp(show.DATA.mes, "February") == 0)  mes1 = 2;
-    if (strcmp(show.DATA.mes, "March") == 0)     mes1 = 3;
-    if (strcmp(show.DATA.mes, "April") == 0)     mes1 = 4;
-    if (strcmp(show.DATA.mes, "May") == 0)       mes1 = 5;
-    if (strcmp(show.DATA.mes, "June") == 0)      mes1 = 6;
-    if (strcmp(show.DATA.mes, "July") == 0)      mes1 = 7;
-    if (strcmp(show.DATA.mes, "August") == 0)    mes1 = 8;
-    if (strcmp(show.DATA.mes, "September") == 0) mes1 = 9;
-    if (strcmp(show.DATA.mes, "October") == 0)   mes1 = 10;
-    if (strcmp(show.DATA.mes, "November") == 0)  mes1 = 11;
-    if (strcmp(show.DATA.mes, "December") == 0)  mes1 = 12;
-    logComp+=12;
-
-    if (strcmp(pivo.DATA.mes, "January") == 0)   mes2 = 1;
-    if (strcmp(pivo.DATA.mes, "February") == 0)  mes2 = 2;
-    if (strcmp(pivo.DATA.mes, "March") == 0)     mes2 = 3;
-    if (strcmp(pivo.DATA.mes, "April") == 0)     mes2 = 4;
-    if (strcmp(pivo.DATA.mes, "May") == 0)       mes2 = 5;
-    if (strcmp(pivo.DATA.mes, "June") == 0)      mes2 = 6;
-    if (strcmp(pivo.DATA.mes, "July") == 0)      mes2 = 7;
-    if (strcmp(pivo.DATA.mes, "August") == 0)    mes2 = 8;
-    if (strcmp(pivo.DATA.mes, "September") == 0) mes2 = 9;
-    if (strcmp(pivo.DATA.mes, "October") == 0)   mes2 = 10;
-    if (strcmp(pivo.DATA.mes, "November") == 0)  mes2 = 11;
-    if (strcmp(pivo.DATA.mes, "December") == 0)  mes2 = 12;
-    logComp+=12;
-
-    logComp++;
-    if(show.DATA.ano < pivo.DATA.ano){
-        return 1;
-    }else if (show.DATA.ano == pivo.DATA.ano && mes1 < mes2){
-        logComp++;
-        return 1;
-    }else if (show.DATA.ano == pivo.DATA.ano && mes1 == mes2 && show.DATA.dia < pivo.DATA.dia){
-        logComp+=2;
-        return 1;
-    }else if (show.DATA.ano == pivo.DATA.ano && mes1 == mes2 && show.DATA.dia == pivo.DATA.dia && strcasecmp(show.TITLE, pivo.TITLE) < 0){
-        logComp+=3;
-        return 1;
+    if(comp != 0){
+        return comp;
+    }else if (comp == 0){
+        return compTitle;
     }
-
-    logComp+=4;
-    return 0;
 
 }
 
 
 void createLog(double tempo){
 
-    FILE* arq = fopen("866018_bolha.txt", "w");
+    FILE* arq = fopen("866018_shellsort.txt", "w");
 
     if(arq == NULL){
         printf("Falha na criação do log!!");
