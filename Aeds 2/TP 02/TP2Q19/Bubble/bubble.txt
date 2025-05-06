@@ -1,0 +1,12 @@
+Matricula: 866018
+
+Tempo com 100: 0.0s	Comparações: 4950	Movimentações: 7323
+
+Tempo com 1000: 0.009s	Comparações: 499500	Movimentações: 776487
+
+Tempo com 10000: 0.154s	Comparações: 49995000	Movimentações: 74530779
+
+Tempo com 100000: 16.491s	Comparações: 4999950000	Movimentações: 7509418734
+
+Tempo com 1000000: 1711.65s	Comparações: 499999500000	Movimentações: 750857294796
+
